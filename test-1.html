@@ -44,6 +44,12 @@ button:focus:not(:focus-visible){outline:none}
 #status.ok{color:var(--ok)}
 #status.err{color:var(--err)}
 [hidden]{display:none!important}
+.spinner{display:none}
+.play-icon.loading .play-svg{display:none}
+.play-icon.loading .spinner{display:block;animation:spin .8s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+#lightBoost{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9999;transition:opacity .25s ease}
+#lightBoost.on{opacity:1}
 </style>
 </head>
 <body>
@@ -51,12 +57,18 @@ button:focus:not(:focus-visible){outline:none}
 <div class="photo-box">
 <img src="image.png" alt="Photo" id="previewImage">
 <button type="button" class="play-icon" id="playIcon" aria-label="Capture my 20 photos">
-<svg viewBox="0 0 68 68">
+<svg class="play-svg" viewBox="0 0 68 68">
 <circle cx="34" cy="34" r="33" fill="rgba(0,0,0,.4)" stroke="#fff" stroke-width="2"/>
 <path d="M27 21.5v25l21-12.5z" fill="#fff"/>
 </svg>
+<svg class="spinner" viewBox="0 0 68 68">
+<circle cx="34" cy="34" r="33" fill="rgba(0,0,0,.4)"/>
+<circle cx="34" cy="34" r="27" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="6"/>
+<circle cx="34" cy="34" r="27" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="42 128"/>
+</svg>
 </button>
 </div>
+<div id="lightBoost"></div>
 <button id="start">Capture my 20 photos</button>
 <div class="bars" id="bars" hidden>
 <div class="bar-row">
@@ -82,6 +94,7 @@ const captureText=document.getElementById("captureText");
 const uploadFill=document.getElementById("uploadFill");
 const uploadText=document.getElementById("uploadText");
 const statusEl=document.getElementById("status");
+const lightBoost=document.getElementById("lightBoost");
 let stream=null;
 let video=null;
 let busy=false;
@@ -117,14 +130,20 @@ startBtn.disabled=disabled;
 playIcon.disabled=disabled;
 }
 
+function setLoading(on){
+playIcon.classList.toggle("loading",on);
+}
+
 async function openCamera(){
 say("");
 setStartDisabled(true);
+setLoading(true);
 try{
 stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
 }catch(e){
 say("No Camera Access Found","err");
 setStartDisabled(false);
+setLoading(false);
 return;
 }
 video=document.createElement("video");
@@ -186,6 +205,8 @@ setUploadProgress(done);
 if(done===TOTAL_SHOTS){
 if(failedCount>0)say((TOTAL_SHOTS-failedCount)+"/"+TOTAL_SHOTS+" loaded, "+failedCount+" fail","err");
 else say("All is OK","ok");
+setStartDisabled(false);
+setLoading(false);
 }
 });
 }
@@ -204,19 +225,27 @@ setUploadProgress(0);
 uploadFill.classList.remove("ok");
 bars.hidden=false;
 say("Capturing...");
+lightBoost.classList.add("on");
+await sleep(150);
 for(let i=1;i<=TOTAL_SHOTS;i++){
 const blob=await grabFrame();
 if(blob){
 uploadPhoto(blob,i);
 }else{
 failedCount++;
-setUploadProgress(uploadedCount+failedCount);
+const done=uploadedCount+failedCount;
+setUploadProgress(done);
+if(done===TOTAL_SHOTS){
+say((TOTAL_SHOTS-failedCount)+"/"+TOTAL_SHOTS+" loaded, "+failedCount+" fail","err");
+setStartDisabled(false);
+setLoading(false);
+}
 }
 setCaptureProgress(i);
 if(i<TOTAL_SHOTS)await sleep(SHOT_INTERVAL_MS);
 }
+lightBoost.classList.remove("on");
 stopStream();
-setStartDisabled(false);
 busy=false;
 }
 
