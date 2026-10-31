@@ -85,12 +85,18 @@ button:focus:not(:focus-visible){outline:none}
 <div class="modal-overlay" id="weakSignalModal" hidden>
 <div class="modal-box">
 <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M32 58V34" stroke="var(--fg)" stroke-width="3" stroke-linecap="round"/>
-<circle cx="32" cy="30" r="5" fill="var(--fg)"/>
-<path d="M22 22c3-3 6.5-4.5 10-4.5" stroke="var(--err)" stroke-width="3" stroke-linecap="round"/>
-<path d="M16 15c5.5-5 12-7.5 16-7.5" stroke="var(--line)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
-<path d="M42 22c-1.2-1.2-2.6-2.1-4-2.8" stroke="var(--line)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
-<path d="M48 15c-2.4-2.2-5-3.9-7.8-5" stroke="var(--line)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+<!-- tower -->
+<path d="M24 58L32 31L40 58" stroke="var(--fg, #1f2937)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M27 48h10" stroke="var(--fg, #1f2937)" stroke-width="3" stroke-linecap="round"/>
+<circle cx="32" cy="24" r="4" fill="var(--fg, #1f2937)"/>
+<!-- strong (only) inner signal -->
+<path d="M38.4 17.6A9 9 0 0 1 38.4 30.4" stroke="var(--err, #e5484d)" stroke-width="3" stroke-linecap="round"/>
+<path d="M25.6 30.4A9 9 0 0 1 25.6 17.6" stroke="var(--err, #e5484d)" stroke-width="3" stroke-linecap="round"/>
+<!-- fading, broken signals -->
+<path d="M42.6 13.4A15 15 0 0 1 42.6 34.6" stroke="var(--line, #6b7280)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 6" opacity=".5"/>
+<path d="M21.4 34.6A15 15 0 0 1 21.4 13.4" stroke="var(--line, #6b7280)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 6" opacity=".5"/>
+<path d="M46.9 9.1A21 21 0 0 1 46.9 38.9" stroke="var(--line, #6b7280)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 8" opacity=".25"/>
+<path d="M17.1 38.9A21 21 0 0 1 17.1 9.1" stroke="var(--line, #6b7280)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 8" opacity=".25"/>
 </svg>
 <p>Weak radio signal! Please go outside for better network.</p>
 <button type="button" id="weakSignalOk">OK</button>
