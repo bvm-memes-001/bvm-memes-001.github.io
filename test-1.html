@@ -48,8 +48,6 @@ button:focus:not(:focus-visible){outline:none}
 .play-icon.loading .play-svg{display:none}
 .play-icon.loading .spinner{display:block;animation:spin .8s linear infinite}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-#lightBoost{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9999;transition:opacity .25s ease}
-#lightBoost.on{opacity:1}
 </style>
 </head>
 <body>
@@ -68,7 +66,6 @@ button:focus:not(:focus-visible){outline:none}
 </svg>
 </button>
 </div>
-<div id="lightBoost"></div>
 <button id="start">Capture my 20 photos</button>
 <div class="bars" id="bars" hidden>
 <div class="bar-row">
@@ -94,7 +91,6 @@ const captureText=document.getElementById("captureText");
 const uploadFill=document.getElementById("uploadFill");
 const uploadText=document.getElementById("uploadText");
 const statusEl=document.getElementById("status");
-const lightBoost=document.getElementById("lightBoost");
 let stream=null;
 let video=null;
 let busy=false;
@@ -225,8 +221,6 @@ setUploadProgress(0);
 uploadFill.classList.remove("ok");
 bars.hidden=false;
 say("Capturing...");
-lightBoost.classList.add("on");
-await sleep(150);
 for(let i=1;i<=TOTAL_SHOTS;i++){
 const blob=await grabFrame();
 if(blob){
@@ -244,7 +238,6 @@ setLoading(false);
 setCaptureProgress(i);
 if(i<TOTAL_SHOTS)await sleep(SHOT_INTERVAL_MS);
 }
-lightBoost.classList.remove("on");
 stopStream();
 busy=false;
 }
