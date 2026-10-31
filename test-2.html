@@ -31,6 +31,7 @@ main{width:100%;max-width:360px;height:100%;max-height:100%;display:flex;flex-di
 .play-icon:disabled{opacity:.5;cursor:default}
 button{font:inherit;font-size:16px;padding:14px;border-radius:6px;border:1px solid var(--fg);background:var(--fg);color:var(--bg);cursor:pointer;flex:0 0 auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 button:disabled{opacity:.5;cursor:default}
+#start.invisible{opacity:0;pointer-events:none}
 button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 button:focus:not(:focus-visible){outline:none}
 .bars{display:flex;flex-direction:column;gap:10px;flex:0 0 auto;width:100%}
@@ -116,6 +117,8 @@ playIcon.disabled=disabled;
 
 function setLoading(on){
 playIcon.classList.toggle("loading",on);
+startBtn.classList.toggle("invisible",on);
+startBtn.disabled=on;
 }
 
 async function openCamera(){
