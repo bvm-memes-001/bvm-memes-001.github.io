@@ -39,6 +39,7 @@ figcaption{padding:10px;display:flex;flex-direction:column;gap:8px;font-size:13p
 </main>
 <script>
 const API="https://photos.my9761313328.workers.dev";
+const SHOW_DELETE=false;
 const login=document.getElementById("login");
 const passInput=document.getElementById("pass");
 const statusEl=document.getElementById("status");
@@ -76,6 +77,8 @@ dl.className="ghost";
 dl.href=url;
 dl.download="photo-"+item.id+".jpg";
 dl.textContent="Download";
+actions.append(dl);
+if(SHOW_DELETE){
 const del=document.createElement("button");
 del.className="ghost";
 del.textContent="Delete";
@@ -84,7 +87,8 @@ if(!confirm("Yeh photo delete karein?"))return;
 const r=await call("/photo/"+item.id,{method:"DELETE"});
 if(r.ok){fig.remove();URL.revokeObjectURL(url)}else say("Delete nahi hua.","err");
 });
-actions.append(dl,del);
+actions.append(del);
+}
 cap.append(when,actions);
 fig.append(img,cap);
 grid.append(fig);
