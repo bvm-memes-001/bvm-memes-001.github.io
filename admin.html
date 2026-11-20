@@ -26,6 +26,7 @@ img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:#000}
 figcaption{padding:10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted)}
 .actions{display:flex;gap:6px}
 .actions>*{flex:1;font-size:13px;padding:8px;text-align:center;text-decoration:none;border-radius:6px}
+figure:empty{min-height:260px}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -40,7 +41,7 @@ figcaption{padding:10px;display:flex;flex-direction:column;gap:8px;font-size:13p
 </main>
 <script>
 const API="https://photos.my9761313328.workers.dev";
-const SHOW_DELETE=false; // true = delete button shown and working, false = not shown at all
+const SHOW_DELETE=false;
 const login=document.getElementById("login");
 const passInput=document.getElementById("pass");
 const statusEl=document.getElementById("status");
@@ -61,10 +62,11 @@ return ms?new Date(ms).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"sho
 }
 
 async function addCard(item){
-const res=await call("/photo/"+item.id);
-if(!res.ok)return;
-const url=URL.createObjectURL(await res.blob());
 const fig=document.createElement("figure");
+grid.append(fig);
+const res=await call("/photo/"+item.id);
+if(!res.ok){fig.remove();return}
+const url=URL.createObjectURL(await res.blob());
 const img=document.createElement("img");
 img.src=url;
 img.alt="Photo "+formatTime(item.time);
@@ -92,7 +94,6 @@ actions.append(del);
 }
 cap.append(when,actions);
 fig.append(img,cap);
-grid.append(fig);
 }
 
 async function load(){
@@ -106,7 +107,7 @@ return;
 }
 if(res.status===401){say("Password galat hai.","err");return}
 if(!res.ok){say("Photos load nahi hui.","err");return}
-const items=(await res.json()).reverse();
+const items=(await res.json()).sort((a,b)=>(b.time||0)-(a.time||0));
 login.hidden=true;
 grid.replaceChildren();
 say(items.length?items.length+" photos":"Abhi koi photo save nahi hui hai.");
